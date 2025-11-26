@@ -1,67 +1,49 @@
 {
-  "title": "Kenya Real Estate Scraper Input",
-  "description": "Configuration for scraping real estate listings from Kenyan and EAC classifieds",
+  "title": "Real Estate Scraper - Input schema",
   "type": "object",
-  "schemaVersion": 1,
   "properties": {
     "sources": {
-      "title": "Sources",
-      "description": "List of classifieds to scrape",
+      "title": "Predefined site presets",
+      "description": "Choose one or more site presets (select). Use 'other' to provide custom startUrls.",
       "type": "array",
-      "editor": "stringList",
-      "default": ["buyrentkenya", "jiji"],
       "items": {
         "type": "string",
-        "enum": ["buyrentkenya", "jiji"]
-      }
+        "enum": [
+          "jiji",
+          "buyrentkenya",
+          "other"
+        ]
+      },
+      "default": ["jiji"],
+      "editor": "select"
     },
-    "listingType": {
-      "title": "Listing Type",
-      "description": "Type of listings to scrape",
-      "type": "string",
-      "editor": "select",
-      "default": "all",
-      "enum": ["all", "sale", "rent"]
+    "startUrls": {
+      "title": "Start URLs",
+      "type": "array",
+      "description": "Array of listing page URLs to start crawling from. If you selected a preset in 'sources', you can leave this empty.",
+      "items": { "type": "string" }
     },
-    "propertyType": {
-      "title": "Property Type",
-      "description": "Type of properties to scrape",
-      "type": "string",
-      "editor": "select",
-      "default": "all",
-      "enum": ["all", "house", "apartment", "land", "commercial"]
-    },
-    "location": {
-      "title": "Location",
-      "description": "Filter by location/region (e.g., Nairobi, Mombasa, Kisumu)",
-      "type": "string",
-      "editor": "textfield",
-      "default": ""
-    },
-    "maxListings": {
-      "title": "Max Listings",
-      "description": "Maximum number of listings to scrape per source",
+    "maxRequests": {
+      "title": "Maximum number of requests",
       "type": "integer",
-      "default": 100,
-      "minimum": 1,
-      "maximum": 10000
+      "default": 200
     },
-    "currency": {
-      "title": "Output Currency",
-      "description": "Currency for normalized prices",
+    "waitBetweenRequestsMillis": {
+      "title": "Delay between requests (ms)",
+      "type": "integer",
+      "default": 1000
+    },
+    "listingLinkSelector": {
+      "title": "Listing page link selector",
       "type": "string",
-      "editor": "select",
-      "default": "KES",
-      "enum": ["KES", "USD"]
+      "default": "a.listing-link"
     },
-    "proxyConfiguration": {
-      "title": "Proxy Configuration",
-      "description": "Proxy settings for the scraper",
+    "detailSelectors": {
+      "title": "Detail page selectors",
       "type": "object",
-      "editor": "proxy",
-      "sectionCaption": "Proxy configuration",
-      "sectionDescription": "Configure proxy settings to avoid blocks"
+      "description": "Mapping of fieldName -> CSS selector to extract from detail pages",
+      "additionalProperties": { "type": "string" }
     }
   },
-  "required": ["sources"]
+  "required": ["startUrls"]
 }
