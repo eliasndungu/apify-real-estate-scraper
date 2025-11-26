@@ -3,7 +3,8 @@
  * from Kenyan and EAC classifieds
  */
 
-// Exchange rate for KES to USD (approximate)
+// Exchange rate for KES to USD (approximate rates as of November 2024)
+// For production use, consider fetching current rates from an exchange rate API
 const KES_TO_USD_RATE = 0.0064;
 const USD_TO_KES_RATE = 156.25;
 
@@ -235,8 +236,8 @@ export function normalizeImages(images) {
             if (url.startsWith('//')) {
                 url = 'https:' + url;
             }
-            // Remove query params for thumbnails if full image available
-            url = url.replace(/-thumb\.\w+$/, '.$1');
+            // Remove thumbnail suffix to get full image if available
+            url = url.replace(/-thumb(\.\w+)$/, '$1');
             return url;
         })
         .filter(url => url.startsWith('http'));
